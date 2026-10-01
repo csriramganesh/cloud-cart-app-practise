@@ -47,6 +47,39 @@ jobs:
             -t ${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-frontend:${{ github.sha }} \
             -t ${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-frontend:latest \
             ./frontend
+      
+     
+      - name: Trivy Scan API
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-api:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+  
+      - name: Trivy Scan Worker
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-worker:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      
+      - name: Trivy Scan Frontend
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-frontend:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH' 
+     
+
+
 
       - name: Push API image
         if: github.event_name == 'push'
