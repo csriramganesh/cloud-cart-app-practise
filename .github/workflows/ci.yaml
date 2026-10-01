@@ -1,0 +1,25 @@
+name: CloudCart CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v4
+
+
+      - name: Build Api image
+        run: docker build -f backend/api/Dockerfile -t cloudcart-api:ci
+
+
+      - name: Build worker image
+        run: docker build -f backend/worker/Dockerfile -t cloudcart-worker:ci
+
+
+      - name: Build frontend image
+        run: docker build -f frontend/Dockerfile -t cloudcart-frontend:ci ./frontend    
