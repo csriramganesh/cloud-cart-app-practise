@@ -14,11 +14,11 @@ jobs:
 
 
       - name: Build Api image
-        run: docker build -f backend/api/Dockerfile -t cloudcart-api:ci
+        run: docker build -f backend/api/Dockerfile -t cloudcart-api:ci .
 
 
       - name: Build worker image
-        run: docker build -f backend/worker/Dockerfile -t cloudcart-worker:ci
+        run: docker build -f backend/worker/Dockerfile -t cloudcart-worker:ci .
 
 
       - name: Build frontend image
