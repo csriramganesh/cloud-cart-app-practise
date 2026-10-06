@@ -80,6 +80,63 @@ jobs:
      
 
 
+      
+      # =====================================
+      # Generate complete security reports
+      # =====================================
+
+      - name: Generate API Security Report
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-api:${{ github.sha }}'
+          format: 'json'
+          output: 'trivy-api-report.json'
+          scanners: 'vuln'
+          exit-code: '0'
+          ignore-unfixed: false
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+
+      - name: Generate Worker Security Report
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-worker:${{ github.sha }}'
+          format: 'json'
+          output: 'trivy-worker-report.json'
+          scanners: 'vuln'
+          exit-code: '0'
+          ignore-unfixed: false
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+
+      - name: Generate Frontend Security Report
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/cloudcart-frontend:${{ github.sha }}'
+          format: 'json'
+          output: 'trivy-frontend-report.json'
+          scanners: 'vuln'
+          exit-code: '0'
+          ignore-unfixed: false
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+
+      # =====================================
+      # Upload downloadable security reports
+      # =====================================
+
+      - name: Upload Trivy Security Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudcart-security-reports
+          path: |
+            trivy-api-report.json
+            trivy-worker-report.json
+            trivy-frontend-report.json
+          if-no-files-found: error
+          retention-days: 14
+ 
+
+
+
+
 
       - name: Push API image
         if: github.event_name == 'push'
