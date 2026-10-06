@@ -1,8 +1,9 @@
 FROM nginx:alpine
 
-# Upgrade Alpine OS packages to available patched versions
-RUN apk upgrade --no-cache
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY . /usr/share/nginx/html
+COPY frontend/index.html /usr/share/nginx/html/index.html
+COPY frontend/app.js /usr/share/nginx/html/app.js
+COPY frontend/style.css /usr/share/nginx/html/style.css
 
 EXPOSE 80
